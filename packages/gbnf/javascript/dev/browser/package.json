@@ -15,7 +15,6 @@
   "author": "Kevin Scott",
   "license": "MIT",
   "dependencies": {
-    "gbnf": "../../",
     "@vanillawc/wc-monaco-editor": "^1.10.15"
   },
   "devDependencies": {

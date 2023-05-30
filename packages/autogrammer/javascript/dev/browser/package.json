@@ -19,14 +19,12 @@
   "dependencies": {
     "@mlc-ai/web-llm": "latest",
     "@vanillawc/wc-monaco-editor": "^1.10.15",
-    "@xenova/transformers": "^2.16.0",
-    "autogrammer": "workspace:*",
-    "contort": "workspace:*"
+    "@xenova/transformers": "^2.16.0"
   },
   "devDependencies": {
     "vite": "^5.1.4",
     "vite-plugin-node-polyfills": "^0.21.0",
     "wireit": "^0.14.4"
   },
-  "packageManager": "pnpm@9.1.3"
+  "packageManager": "pnpm@9.1.4"
 }

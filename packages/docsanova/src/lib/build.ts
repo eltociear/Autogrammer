@@ -13,13 +13,15 @@ export interface BuildOpts extends Opts {
   output: string;
 }
 
-
 import path from 'path';
 import * as url from 'url';
-import { buildRollup, } from './utils/rollup.js';
 import { Opts, } from './types.js';
 import { getCreateFile, } from './utils/get-create-file.js';
 import { statSync, } from 'fs';
+import {
+  symlinkNodeModules,
+} from './utils/symlink-node-modules.js';
+import { buildTSC, } from './utils/tsc.js';
 
 const __dirname = url.fileURLToPath(new URL('.', import.meta.url));
 const ROOT = path.resolve(__dirname, "../../");
@@ -31,6 +33,7 @@ export const build = async ({
   output: buildDir,
   contentDir,
   srcDir,
+  nodeModulesDir = '_nm',
 }: BuildOpts) => {
   if (!inputDir) {
     throw new Error('No input specified');
@@ -57,10 +60,16 @@ export const build = async ({
     }
     return createFile(input, output, contents => Mustache.render(contents, {
       tmpInput,
+      NODE_MODULES_FOLDER,
+      STYLES_FOLDER: 'styles',
+      INTERNAL_JS_FOLDER: '_internal_js',
+      JS_FOLDER: 'js',
     }));
   }));
 
-  await buildRollup(inputDir);
+  buildTSC(inputDir);
+
+  await symlinkNodeModules(inputDir, tmpInput);
 
   // For monitoring directories
   await Promise.all([
@@ -91,8 +100,8 @@ export const build = async ({
       output: path.resolve(tmpInput, 'styles'),
     },
     {
-      input: path.resolve(inputDir, '.js'),
-      output: path.resolve(tmpInput, '.js'),
+      input: path.resolve(inputDir, '.docsanova/js'),
+      output: path.resolve(tmpInput, 'js'),
     },
   ].map(async ({ input, output, transform, }) => {
     const files = await glob(path.resolve(input, '**/*'));
@@ -104,7 +113,6 @@ export const build = async ({
       }
     }));
   }));
-  console.log('all done!');
 
   const elev = new Eleventy(tmpInput, buildDir, {
     source: "cli",

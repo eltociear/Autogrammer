@@ -18,7 +18,7 @@ const getOptions = (buildDir: string): RollupOptions => ({
   input: path.resolve(buildDir, 'src/index.ts'),
   output: [{
     sourcemap: true,
-    dir: path.resolve(buildDir, '.js'),
+    dir: path.resolve(buildDir, '.docsanova/js'),
     format: 'esm' as ModuleFormat,
   },],
   plugins: [

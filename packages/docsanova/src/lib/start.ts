@@ -5,17 +5,17 @@ import {
 import chokidar from 'chokidar';
 import pkg from 'fs-extra';
 const {
-  readFileSync,
   existsSync,
   mkdirp,
   unlink,
-  realpath,
+  // realpath,
   // symlink,
 } = pkg;
 import os from 'os';
 
 export interface StartOpts extends Opts {
   port: number;
+  tmpRoot: string;
 }
 
 import path from 'path';
@@ -26,41 +26,34 @@ import { getCreateFile, } from './utils/get-create-file.js';
 import { getPromise, } from './utils/get-promise.js';
 import { isExcluded, } from './utils/is-excluded.js';
 import { TSCWatcher, } from './utils/tsc.js';
-import { symlink, } from 'fs';
+import {
+  symlinkNodeModules,
+} from './utils/symlink-node-modules.js';
 
 const __dirname = url.fileURLToPath(new URL('.', import.meta.url));
 const ROOT = path.resolve(__dirname, "../../");
 const CONTENT = path.resolve(ROOT, "content");
 const JS = path.resolve(ROOT, "js");
 
-const getPackageJSON = (inputDir: string) => {
-  const contents = readFileSync(path.resolve(inputDir, 'package.json'), 'utf-8');
-  const packageJSON = JSON.parse(contents) as {
-    dependencies: Record<string, string>;
-  };
-  return packageJSON;
-};
-
+const rand = Math.random().toString(36);
 export const start = async ({
   port,
   input: inputDir,
   contentDir,
   srcDir,
+  tmpRoot = path.resolve(os.tmpdir(), rand),
+  nodeModulesDir = '_nm',
 }: StartOpts) => {
   if (!inputDir) {
     throw new Error('No input specified');
   }
-  // const tmpInput = path.resolve(ROOT, 'tmp/input');
-  // const tmpOutput = path.resolve(ROOT, 'tmp/output');
-  const tmpInput = path.resolve(os.tmpdir(), 'input', Math.random().toString(36));
-  const tmpOutput = path.resolve(os.tmpdir(), 'output', Math.random().toString(36));
+  const tmpInput = path.resolve(tmpRoot, 'input');
+  const tmpOutput = path.resolve(tmpRoot, 'output');
   const createFile = getCreateFile(inputDir);
   await Promise.all([
     mkdirp(tmpInput),
     mkdirp(tmpOutput),
   ]);
-
-  const { dependencies, } = getPackageJSON(inputDir);
 
   // For monitoring individual files
   const [ready, readyCallback,] = getPromise();
@@ -91,6 +84,10 @@ export const start = async ({
         void createFile(input, output, contents => Mustache.render(contents, {
           tmpInput,
           tmpOutput,
+          NODE_MODULES_FOLDER: nodeModulesDir,
+          STYLES_FOLDER: 'styles',
+          INTERNAL_JS_FOLDER: '_internal_js',
+          JS_FOLDER: 'js',
         }));
       } else if (!['addDir',].includes(event)) {
         console.log(event, path);
@@ -98,24 +95,7 @@ export const start = async ({
     });
   });
 
-  // // await unlink(path.resolve(tmpInput, '.node_modules'));
-  // symlink(path.resolve(inputDir, 'node_modules'), path.resolve(tmpInput, '.node_modules'), 'dir', (err) => {
-  //   if (err) {
-  //     console.error(err);
-  //   }
-  // });
-  await Promise.all(Object.keys(dependencies).filter(name => {
-    return !['docsanova',].includes(name);
-  }).map(async (name) => {
-    const src = await realpath(path.resolve(inputDir, 'node_modules', name));
-    const dest = path.resolve(tmpInput, 'node_modules', name);
-    await mkdirp(path.dirname(dest));
-    symlink(src, dest, 'dir', (err) => {
-      if (err) {
-        console.error(err);
-      }
-    });
-  }));
+  await symlinkNodeModules(inputDir, tmpInput);
 
   // For monitoring directories
   [
@@ -146,8 +126,8 @@ ${content}
       output: path.resolve(tmpInput, 'styles'),
     },
     {
-      input: path.resolve(inputDir, '.js'),
-      output: path.resolve(tmpInput, '.js'),
+      input: path.resolve(inputDir, '.docsanova/js'),
+      output: path.resolve(tmpInput, 'js'),
     },
     // ...Object.keys(dependencies).filter(name => {
     //   return !['docsanova'].includes(name);

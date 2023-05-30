@@ -2,8 +2,6 @@ const path = require('path');
 const fs = require('fs');
 const syntaxHighlight = require("@11ty/eleventy-plugin-syntaxhighlight");
 
-
-
 function autoCollection(eleventyConfig = {}, pluginConfig = {}) {
   const { baseDir, prefix = '', fileGlob } = pluginConfig;
   const dirs = fs
@@ -32,7 +30,6 @@ const sortByOrder = (values) => {
   if (values === undefined) {
     return undefined;
   }
-  // console.log('values', values);
   return values.sort(({
     data: {
       displayOrder: a,
@@ -68,38 +65,33 @@ const codeEditor = {
     if (hasTemplateFormat(options.templateFormats, "md")) {
       eleventyConfig.addTransform("code-editor", function (content, outputPath) {
         return content.replace(new RegExp('<pre class="language-javascript"><code class="language-javascript">(.*?)</code></pre>', 'gs'), (match, contents, code) => {
-          // console.log(contents, code)
           return `<code-editor language="javascript">${contents}</code-editor>`;
         })
-        // replace(/<pre class="language-javascript"><code class="language-javascript">(.*?)pre/g, (match, language, code) => {
-        //   return 'SUP'
-        //   // return `<code-editor language="${language}">${code}</code-editor>`;
-        // });
-        // return content.replace(/<pre><code class="language-javascript">([\s\S]*?)<\/code><\/pre>/g, (match, language, code) => {
-        //   return 'SUP'
-        //   // return `<code-editor language="${language}">${code}</code-editor>`;
-        // });
       });
-      // eleventyConfig.addMarkdownHighlighter((str, language) => {
-      //   // return `<pre class="language-foo" bar="baz">BIGTIME</pre>`;
-      //   return `<pre class="code-editor"><code-editor language="${language}"></code-editor></pre>`;
-      //   // return `<pre class="code-editor"><code-editor language="${language}">${str}</code-editor></pre>`;
-      // });
     }
 
   },
 };
 
 module.exports = function (eleventyConfig) {
+	eleventyConfig.ignores.add("**/_nm/**/*.md");
+	eleventyConfig.ignores.add("**/_nm/**/*.html");
+
   eleventyConfig.addFilter('sortByOrder', sortByOrder);
   eleventyConfig.addPlugin(syntaxHighlight);
   eleventyConfig.addPlugin(codeEditor);
 
-  // config.addPassthroughCopy('./src/images/');
-  eleventyConfig.addPassthroughCopy(path.resolve('{{{tmpInput}}}', './.js'));
-  eleventyConfig.addPassthroughCopy(path.resolve('{{{tmpInput}}}', './_internal_js'));
-  eleventyConfig.addPassthroughCopy(path.resolve('{{{tmpInput}}}', './styles'));
-  eleventyConfig.addPassthroughCopy(path.resolve('{{{tmpInput}}}', './node_modules'));
+  eleventyConfig.addPassthroughCopy(path.resolve('{{{tmpInput}}}', '{{{JS_FOLDER}}}'));
+  eleventyConfig.addPassthroughCopy(path.resolve('{{{tmpInput}}}', '{{{INTERNAL_JS_FOLDER}}}'));
+  eleventyConfig.addPassthroughCopy(path.resolve('{{{tmpInput}}}', '{{{STYLES_FOLDER}}}'));
+  eleventyConfig.addPassthroughCopy(path.resolve('{{{tmpInput}}}', '{{{NODE_MODULES_FOLDER}}}/**/*.js'), { 
+    expand: true,
+    // filter: (...path) => {
+    //   console.log('FILTER:', ...path);
+    //   return false;
+    //   // return path.split('/').filter(n => n === 'node_modules').length < 2;
+    // },
+    });
 
   eleventyConfig.addPlugin(autoCollection, {
     baseDir: "{{{tmpInput}}}",

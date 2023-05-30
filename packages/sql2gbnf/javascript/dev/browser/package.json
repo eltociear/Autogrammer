@@ -17,8 +17,7 @@
   "author": "Kevin Scott",
   "license": "MIT",
   "dependencies": {
-    "@dbml/core": "^3.4.3",
-    "sql2gbnf": "workspace:*"
+    "@dbml/core": "^3.4.3"
   },
   "devDependencies": {
     "vite": "^5.1.4",

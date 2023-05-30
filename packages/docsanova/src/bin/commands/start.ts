@@ -14,4 +14,7 @@ export const registerScript = (program: Command) => program.command('start')
   .option('-i, --input <string>', 'Input directory', './')
   .option('-c, --contentDir <string>', 'Content directory', 'content')
   .option('-s, --srcDir <string>', 'src directory', 'src')
+  .option('-t, --tmpRoot <string>', 'tmp root directory')
+  .option('-n, --nodeModulesDir <string>', 'node modules directory')
+
   .action(start);

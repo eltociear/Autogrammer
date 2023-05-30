@@ -1,6 +1,5 @@
 {
   "name": "TEST",
-  "url": "http://localhost:8080",
   "nav": [
     {
       "text": "Autogrammer",
@@ -14,5 +13,8 @@
       "text": "Demos",
       "url": "/demos/"
     }
-  ]
+  ],
+  "internals": {
+    "node_modules": "_nm"
+  }
 }

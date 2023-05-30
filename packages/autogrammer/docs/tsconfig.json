@@ -14,7 +14,7 @@
     "skipLibCheck": true,
     "declaration": true,
     "rootDir": "./src",
-    "outDir": "./.js"
+    "outDir": "./.docsanova/js"
   },
   "include": [
     "./src/**/*.ts",

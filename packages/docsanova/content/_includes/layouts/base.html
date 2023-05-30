@@ -5,10 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>{{ docsanova.title }}</title>
-    <link
-			href="https://unpkg.com/prismjs@1.29.0/themes/prism-solarizedlight.css"
-			rel="stylesheet"
-		/>
     
     <link rel="stylesheet" href="{{ '/styles/reset.css' | url | bust }}" />
     <link rel="stylesheet" href="{{ '/styles/github-markdown.css' | url | bust }}" />
@@ -19,21 +15,21 @@
       {
         "imports": {
           "@xenova/transformers": "https://cdn.jsdelivr.net/npm/@xenova/transformers/dist/transformers.min.js",
-          "@vanillawc/wc-codemirror": "/node_modules/@vanillawc/wc-codemirror/index.js",
-          "@vanillawc/wc-codemirror/": "/node_modules/@vanillawc/wc-codemirror/",
-          "@lit/reactive-element": "/node_modules/@lit/reactive-element/reactive-element.js",
-          "@lit/reactive-element/": "/node_modules/@lit/reactive-element/",
-          "autogrammer": "/node_modules/autogrammer/dist/index.js",
-          "contort": "/node_modules/contort/dist/index.js",
-          "gbnf": "/node_modules/gbnf/dist/index.js",
-          "json2gbnf": "/node_modules/json2gbnf/dist/index.js",
-          "sql2gbnf": "/node_modules/sql2gbnf/dist/index.js",
-          "lit-element": "/node_modules/lit-element/index.js",
-          "lit-element/lit-element.js": "/node_modules/lit-element/lit-element.js",
-          "lit-html": "/node_modules/lit-html/lit-html.js",
-          "lit-html/": "/node_modules/lit-html/",
-          "lit": "/node_modules/lit/index.js",
-          "lit/": "/node_modules/lit/"
+          "@vanillawc/wc-codemirror": "/_nm/@vanillawc/wc-codemirror/index.js",
+          "@vanillawc/wc-codemirror/": "/_nm/@vanillawc/wc-codemirror/",
+          "@lit/reactive-element": "/_nm/@lit/reactive-element/reactive-element.js",
+          "@lit/reactive-element/": "/_nm/@lit/reactive-element/",
+          "autogrammer": "/_nm/autogrammer/dist/index.js",
+          "contort": "/_nm/contort/dist/index.js",
+          "gbnf": "/_nm/gbnf/dist/index.js",
+          "json2gbnf": "/_nm/json2gbnf/dist/index.js",
+          "sql2gbnf": "/_nm/sql2gbnf/dist/index.js",
+          "lit-element": "/_nm/lit-element/index.js",
+          "lit-element/lit-element.js": "/_nm/lit-element/lit-element.js",
+          "lit-html": "/_nm/lit-html/lit-html.js",
+          "lit-html/": "/_nm/lit-html/",
+          "lit": "/_nm/lit/index.js",
+          "lit/": "/_nm/lit/"
         }
       }
       </script>
@@ -43,7 +39,7 @@
     <div id="container">
       {% block content %}{% endblock %}
     </div>
-    <script async=false defer=false type="module" src="{{ docsanova.url }}/_internal_js/spa.js"></script>
-    <script async=false defer=false type="module" src="{{ docsanova.url }}/.js/index.js"></script>
+    <script async=false defer=false type="module" src="/_internal_js/spa.js"></script>
+    <script async=false defer=false type="module" src="/js/index.js"></script>
   </body>
 </html>
