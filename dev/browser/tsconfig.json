@@ -1,0 +1,9 @@
+{
+  "compilerOptions": {
+    "module": "esnext",
+    "target": "ESNext",
+    "lib": ["dom"],
+    "esModuleInterop": true,
+    "downlevelIteration": true
+  }
+}
