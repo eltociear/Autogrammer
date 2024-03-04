@@ -1,0 +1,28 @@
+{
+  "name": "@dev/browser",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "dev": "wireit"
+  },
+  "wireit": {
+    "dev": {
+      "command": "vite --host --config ./vite.config.ts",
+      "dependencies": [
+        "../../packages/contortionist:build",
+        "../../packages/gbnf:build"
+      ]
+    }
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@xenova/transformers": "github:xenova/transformers.js"
+  },
+  "devDependencies": {
+    "vite": "^5.1.4",
+    "vite-plugin-node-polyfills": "^0.21.0",
+    "wireit": "^0.14.4"
+  }
+}

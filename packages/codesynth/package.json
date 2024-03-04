@@ -1,0 +1,48 @@
+{
+  "name": "codesynth",
+  "type": "module",
+  "version": "0.0.1",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/thekevinscott/codesynth.git"
+  },
+  "main": "./dist/codesynth.js",
+  "exports": {
+    ".": "./dist/codesynth.js"
+  },
+  "scripts": {
+    "build": "wireit"
+  },
+  "wireit": {
+    "build": {
+      "command": "rimraf ./dist && vite build",
+      "files": [
+        "./src/**/*.json",
+        "./src/**/*.ts",
+        "./src/**/*.js",
+        "package.json",
+        "vite.config.ts",
+        "tsconfig.json"
+      ],
+      "output": [
+        "./dist/**"
+      ]
+    }
+  },
+  "keywords": [],
+  "author": "Kevin Scott",
+  "license": "MIT",
+  "dependencies": {
+    "contortionist": "latest"
+  },
+  "devDependencies": {
+    "@types/jest": "^29.5.12",
+    "rimraf": "^5.0.5",
+    "tslib": "^2.6.2",
+    "typescript": "^5.3.3",
+    "vite": "^5.1.4",
+    "vite-plugin-dts": "^3.7.3",
+    "vitest": "^1.3.1",
+    "wireit": "^0.14.4"
+  }
+}
