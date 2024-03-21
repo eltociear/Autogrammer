@@ -1,17 +1,32 @@
-import Contortionist, { ModelDefinition, ExternalExecuteOptions } from 'contortionist';
+import Contortionist, { ExternalExecuteOptions } from 'contortionist';
 import { getGrammar } from './grammars/index.js';
-import { SUPPORTED_LANGUAGES, SupportedLanguage } from './types.js';
-
-interface Options {
-  language: SupportedLanguage;
-  model: ModelDefinition;
-}
+import { ConstructorOptions, SUPPORTED_LANGUAGES, SupportedLanguage, isSupportedLanguage } from './types.js';
+import { buildPrompt, parseOptions } from './utils.js';
 
 export class CodeSynth {
   language: SupportedLanguage;
   contortionist: Contortionist<any>;
 
-  constructor({ language, model }: Options) {
+  /**
+   * @hidden
+  */
+  _abortController = new AbortController();
+
+  /**
+   * Instantiates an instance of CodeSynth.
+   * 
+   * ```javascript
+   * import CodeSynth from 'codesynth';
+   * 
+   * const synth = new CodeSynth({
+   *   language: 'javascript',
+   *   model: {},
+   * });
+   * ```
+   * 
+   * @returns an instance of a CodeSynth class.
+   */
+  constructor({ language, model }: ConstructorOptions) {
     if (!isSupportedLanguage(language)) {
       throw new Error(`Unsupported language: ${language}. Only one of ${JSON.stringify(SUPPORTED_LANGUAGES)} are supported.`);
     }
@@ -23,22 +38,18 @@ export class CodeSynth {
   }
 
   synthesize = (prompt: string, options: ExternalExecuteOptions<any>) => {
-    return this.contortionist.execute(buildPrompt(prompt, this.language), parseOptions(options));
+    const builtPrompt = buildPrompt(prompt, this.language);
+    const parsedOptions = parseOptions(options);
+    return this.contortionist.execute(builtPrompt, parsedOptions,
+      //   {
+      //   // signal: this._abortController.signal,
+      // }
+    );
   };
+
+  abort = () => {
+    console.log('abort!')
+    this.contortionist.abort();
+  }
 }
 
-const isSupportedLanguage = (language: string): language is SupportedLanguage => SUPPORTED_LANGUAGES.includes(language);
-
-const parseOptions = (options: ExternalExecuteOptions<any>) => {
-  return {
-    ...options,
-  }
-};
-
-const buildPrompt = (prompt: string, language: SupportedLanguage) => {
-  return `
-  You are a very helpful codebot. Do your best to answer the user's query using only the language "${language}".
-
-  ${prompt}
-  `.trim();
-};

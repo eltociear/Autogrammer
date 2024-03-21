@@ -1,3 +1,5 @@
+import { ModelDefinition } from "contortionist";
+
 export type SupportedLanguage =
   // 'sql' | 
   // 'python' | 
@@ -9,3 +11,10 @@ export const SUPPORTED_LANGUAGES = [
   // 'javascript', 
   'json',
 ];
+
+export const isSupportedLanguage = (language: string): language is SupportedLanguage => SUPPORTED_LANGUAGES.includes(language);
+
+export interface ConstructorOptions {
+  language: SupportedLanguage;
+  model: ModelDefinition;
+}

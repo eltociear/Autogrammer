@@ -8,20 +8,7 @@ export default defineConfig({
       entry: 'src/index.ts',
       formats: ['es', 'umd'],
       name: 'CodeSynth',
-
     }
-    // rollupOptions: {
-    //   // https://rollupjs.org/configuration-options/
-    //   input: `src/index.ts`,
-    //   output: [
-    //     {
-    //       file: `./dist/index.js`,
-    //       format: 'esm',
-    //       sourcemap: true,
-    //       exports: 'default',
-    //     },
-    //   ]
-    // },
   },
   plugins: [dts()],
   test: {

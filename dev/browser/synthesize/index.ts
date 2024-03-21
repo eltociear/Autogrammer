@@ -1,4 +1,4 @@
-import Codesynth from '../../../../packages/codesynth/src/index.js';
+import Codesynth from '../../../packages/codesynth/src/index.js';
 
 const synth = new Codesynth({
   language: 'json',
@@ -7,6 +7,8 @@ const synth = new Codesynth({
     endpoint: import.meta.env.VITE_LLAMACPP_ENDPOINT_URL,
   }
 });
+
+let abortController: AbortController = new AbortController();
 
 const form = document.getElementById('form');
 const button = document.getElementById('submit');
@@ -19,19 +21,28 @@ form.onsubmit = async (e) => {
   await synthesize(input.value);
 };
 
+
 const synthesize = async (prompt: string) => {
   button.setAttribute('disabled', '');
+  let last = '';
+  let numberOfLast = 0;
   const result = await synth.synthesize(prompt, {
     n: 400,
     stream: true,
     streamCallback: ({ partial }) => {
+
+      // check for generating blank spaces, if so abort
+      // abortController.abort();
       output.textContent = partial;
-      // const trimmed = partial.trim();
-      // try {
-      //   output.textContent = JSON.stringify(JSON.parse(trimmed), null, 2);
-      // } catch (err) {
-      //   output.textContent = trimmed;
-      // }
+      const trimmed = partial.trim();
+      if (last !== trimmed) {
+        last = trimmed;
+        numberOfLast = 0;
+      } else if (numberOfLast >= 3) {
+        synth.abort();
+      } else {
+        numberOfLast++;
+      }
     }
   });
 
@@ -42,6 +53,7 @@ const synthesize = async (prompt: string) => {
     validity.textContent = 'Invalid JSON';
   }
   button.removeAttribute('disabled');
+  abortController = new AbortController();
 };
 
 synthesize(input.value);
