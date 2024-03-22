@@ -43,7 +43,7 @@ jobs:
         working-directory: ./packages/codesynth
         run: pnpm build
 
-      - run: pnpm publish --no-git-checks
+      - run: pnpm publish
         working-directory: ./packages/codesynth
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

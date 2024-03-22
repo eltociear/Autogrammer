@@ -1,5 +1,5 @@
 {
-  "name": "@dev/browser",
+  "name": "@codesynth/dev-browser",
   "type": "module",
   "private": true,
   "scripts": {
@@ -7,18 +7,15 @@
   },
   "wireit": {
     "dev": {
-      "command": "vite --host --config ./vite.config.ts",
-      "dependencies": [
-        "../../packages/contortionist:build",
-        "../../packages/gbnf:build"
-      ]
+      "command": "vite --host --config ./vite.config.ts --port 5173",
+      "dependencies": []
     }
   },
   "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "author": "Kevin Scott",
+  "license": "MIT",
   "dependencies": {
-    "@xenova/transformers": "github:xenova/transformers.js"
+    "@vanillawc/wc-monaco-editor": "^1.10.15"
   },
   "devDependencies": {
     "vite": "^5.1.4",
