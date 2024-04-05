@@ -7,6 +7,7 @@ export default defineConfig({
     lib: {
       entry: 'src/index.ts',
       formats: ['es', 'umd'],
+      fileName: 'index',
       name: 'CodeSynth',
     }
   },
