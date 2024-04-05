@@ -6,7 +6,7 @@ import JSON_GRAMMAR from './json.gbnf?raw' assert { type: 'text' };
 // import PYTHON_GRAMMAR from './python.gbnf?raw';
 // import JAVASCRIPT_GRAMMAR from './javascript.gbnf?raw';
 
-type Variables = Variables_SQL | object;
+export type Variables<L extends SupportedLanguage> = L extends 'sql' ? (Variables_SQL | string) : object;
 
 type Variables_SQL = {
   selectlist?: string[];
@@ -17,9 +17,16 @@ function isLanguage<L extends SupportedLanguage>(language: SupportedLanguage, te
   return language === testingLanguage;
 }
 
-function buildGrammar<L extends SupportedLanguage>(language: L, grammarTemplate: string, variables: L extends 'sql' ? Variables_SQL : object = {}) {
+function parseSQLVariables(variables: Variables_SQL | string): Variables_SQL {
+  if (typeof variables === 'string') {
+    return {};
+  }
+  return variables;
+};
+
+function buildGrammar<L extends SupportedLanguage>(language: L, grammarTemplate: string, variables: Variables<L>) {
   if (isLanguage(language, 'sql')) {
-    return Mustache.render(grammarTemplate, Object.entries(variables as Variables_SQL).reduce((obj, [key, value,]) => {
+    return Mustache.render(grammarTemplate, Object.entries(parseSQLVariables(variables)).reduce((obj, [key, value,]) => {
       if (value.length === 0) {
         return obj;
       }
@@ -42,4 +49,9 @@ const GRAMMARS: Record<SupportedLanguage, string> = {
   json: JSON_GRAMMAR as string,
 };
 
-export const getGrammar = (language: SupportedLanguage, variables: Variables = {}): string => buildGrammar(language, GRAMMARS[language], variables);
+export function getGrammar<L extends SupportedLanguage>(
+  language: L,
+  variables?: Variables<L>,
+): string {
+  return buildGrammar<L>(language, GRAMMARS[language], variables);
+}

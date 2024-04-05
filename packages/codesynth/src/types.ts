@@ -14,7 +14,7 @@ export const SUPPORTED_LANGUAGES = [
 
 export const isSupportedLanguage = (language: string): language is SupportedLanguage => SUPPORTED_LANGUAGES.includes(language);
 
-export interface ConstructorOptions {
-  language: SupportedLanguage;
+export interface ConstructorOptions<L extends SupportedLanguage> {
+  language: L;
   model: ContortionistOptions<undefined>['model'];
 }
