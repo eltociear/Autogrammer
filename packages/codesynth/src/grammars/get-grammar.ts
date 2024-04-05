@@ -13,7 +13,7 @@ type Variables_SQL = {
   tablename?: string[];
 };
 
-function isLanguage<L extends SupportedLanguage>(language: SupportedLanguage, testingLanguage: L): language is L {
+export function isLanguage<L extends SupportedLanguage>(language: SupportedLanguage, testingLanguage: L): language is L {
   return language === testingLanguage;
 }
 
