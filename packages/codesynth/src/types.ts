@@ -1,12 +1,12 @@
-import { ModelDefinition } from "contortionist";
+import type { ContortionistOptions, } from "contort";
 
 export type SupportedLanguage =
-  // 'sql' | 
+  'sql' |
   // 'python' | 
   // 'javascript' | 
   'json';
 export const SUPPORTED_LANGUAGES = [
-  // 'sql', 
+  'sql',
   // 'python', 
   // 'javascript', 
   'json',
@@ -14,7 +14,7 @@ export const SUPPORTED_LANGUAGES = [
 
 export const isSupportedLanguage = (language: string): language is SupportedLanguage => SUPPORTED_LANGUAGES.includes(language);
 
-export interface ConstructorOptions {
-  language: SupportedLanguage;
-  model: ModelDefinition;
+export interface ConstructorOptions<L extends SupportedLanguage> {
+  language: L;
+  model: ContortionistOptions<undefined>['model'];
 }

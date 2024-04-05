@@ -35,6 +35,7 @@
       "command": "rimraf ./dist && pnpm build:umd && pnpm build:esm && cp ../../README.md ./README.md && cp ../../LICENSE ./LICENSE",
       "files": [
         "../../README.md",
+        "../../LICENSE",
         "./src/**/*.ts",
         "package.json",
         "vite.config.ts",
@@ -42,6 +43,7 @@
       ],
       "output": [
         "./dist/**",
+        "./LICENSE",
         "./README.md"
       ]
     }
@@ -65,6 +67,12 @@
   },
   "devDependencies": {
     "@types/jest": "^29.5.12",
+    "@types/mustache": "^4.2.5",
+    "@typescript-eslint/eslint-plugin": "^7.5.0",
+    "eslint": "^8.57.0",
+    "eslint-config-prettier": "^9.1.0",
+    "path-exists-cli": "^2.0.0",
+    "prettier": "^3.2.5",
     "rimraf": "^5.0.5",
     "tslib": "^2.6.2",
     "typescript": "^5.3.3",

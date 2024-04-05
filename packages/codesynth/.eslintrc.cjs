@@ -3,7 +3,7 @@ module.exports = {
     "browser": true,
     "es6": true
   },
-  "ignorePatterns": ["**/*.test.ts", "**/*.generated.ts"],
+  "ignorePatterns": ["**/*.test.ts", "**/__fixtures__/**/*.ts"],
   "extends": [
     "plugin:@typescript-eslint/recommended",
     "plugin:@typescript-eslint/recommended-requiring-type-checking",
@@ -37,7 +37,7 @@ module.exports = {
       ],
 
       "parserOptions": {
-        "project": "./tsconfig.eslint.json",
+        "project": "./tsconfig.json",
         "sourceType": "module"
       },
     },

@@ -1,11 +1,11 @@
-import { ExternalExecuteOptions } from "contortionist";
-import { SupportedLanguage } from "./types.js";
+// import { ExternalExecuteOptions, } from "contort";
+import { SupportedLanguage, } from "./types.js";
 
-export const parseOptions = (options: ExternalExecuteOptions<any>) => {
-  return {
-    ...options,
-  }
-};
+// export const parseOptions = (options: ExternalExecuteOptions<undefined, boolean>) => {
+//   return {
+//     ...options,
+//   };
+// };
 
 export const buildPrompt = (prompt: string, language: SupportedLanguage) => {
   return `
