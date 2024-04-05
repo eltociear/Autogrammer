@@ -6,7 +6,7 @@ export type SupportedLanguage =
   // 'javascript' | 
   'json';
 export const SUPPORTED_LANGUAGES = [
-  // 'sql', 
+  'sql',
   // 'python', 
   // 'javascript', 
   'json',

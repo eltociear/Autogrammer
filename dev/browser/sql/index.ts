@@ -1,7 +1,10 @@
 import Codesynth from '../../../packages/codesynth/src/index.js';
+import { pipeline } from '@xenova/transformers';
+// const model = pipeline('text-generation', 'Xenova/gpt2');
 
 const synth = new Codesynth({
   language: 'sql',
+  // model,
   model: {
     protocol: 'llama.cpp',
     endpoint: import.meta.env.VITE_LLAMACPP_ENDPOINT_URL,
@@ -23,16 +26,20 @@ form.onsubmit = async (e) => {
 
 const synthesize = async (prompt: string) => {
   button.setAttribute('disabled', '');
+  console.log('1')
   const result = await synth.synthesize(prompt, {
     selectlist: ['foo', 'bar', 'bar2', 'foo2', 'userid', 'username', 'created', 'modified'],
     tablename: ['baz'],
   }, {
-    n: 400,
+    // n: 400,
+    n: 4,
     stream: true,
-    streamCallback: ({ partial }) => {
+    callback: ({ partial }) => {
       output.textContent = partial;
     }
   });
+  console.log('2')
+  console.log('result', result)
 
   button.removeAttribute('disabled');
   abortController = new AbortController();

@@ -24,9 +24,10 @@ function parseSQLVariables(variables: Variables_SQL | string): Variables_SQL {
   return variables;
 };
 
-function buildGrammar<L extends SupportedLanguage>(language: L, grammarTemplate: string, variables: Variables<L>) {
+function buildGrammar<L extends SupportedLanguage>(language: L, grammarTemplate: string, variables: Variables<L> = {}) {
   if (isLanguage(language, 'sql')) {
-    return Mustache.render(grammarTemplate, Object.entries(parseSQLVariables(variables)).reduce((obj, [key, value,]) => {
+    const sqlVariables = Object.entries(parseSQLVariables(variables));
+    return Mustache.render(grammarTemplate, sqlVariables.reduce((obj, [key, value,]) => {
       if (value.length === 0) {
         return obj;
       }

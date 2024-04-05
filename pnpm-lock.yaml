@@ -26,6 +26,9 @@ importers:
       '@vanillawc/wc-monaco-editor':
         specifier: ^1.10.15
         version: 1.10.15
+      '@xenova/transformers':
+        specifier: ^2.16.0
+        version: 2.16.1
     devDependencies:
       vite:
         specifier: ^5.1.4

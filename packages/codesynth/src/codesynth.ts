@@ -34,6 +34,7 @@ export class CodeSynth<L extends SupportedLanguage> {
     this.language = language;
     this.contortionist = new Contortionist({
       model,
+      grammar: getGrammar<L>(language),
     });
   }
 
@@ -55,7 +56,7 @@ export class CodeSynth<L extends SupportedLanguage> {
     if (languageOptions !== undefined) {
       if (this.language === 'sql') {
         this.contortionist.grammar = getGrammar<'sql'>(this.language, languageOptions);
-        console.log(this.contortionist.grammar);
+        // console.log(this.contortionist.grammar);
         // } else if (this.language === 'json') {
         //   const grammar = await compile(languageOptions, 'Root');
         //   console.log(grammar);
