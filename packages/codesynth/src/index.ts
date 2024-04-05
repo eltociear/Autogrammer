@@ -1,1 +1,1 @@
-export { CodeSynth as default } from './codesynth.js';
+export { CodeSynth as default, } from './codesynth.js';

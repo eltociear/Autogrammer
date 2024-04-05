@@ -1,11 +1,11 @@
-import Contortionist, { ExternalExecuteOptions } from 'contort';
-import { getGrammar } from './grammars/index.js';
-import { ConstructorOptions, SUPPORTED_LANGUAGES, SupportedLanguage, isSupportedLanguage } from './types.js';
-import { buildPrompt, parseOptions } from './utils.js';
+import Contortionist, { ExternalExecuteOptions, } from 'contort';
+import { getGrammar, } from './grammars/index.js';
+import { ConstructorOptions, SUPPORTED_LANGUAGES, SupportedLanguage, isSupportedLanguage, } from './types.js';
+import { buildPrompt, parseOptions, } from './utils.js';
 
 export class CodeSynth {
   language: SupportedLanguage;
-  contortionist: Contortionist<any>;
+  contortionist: Contortionist<undefined>;
 
   /**
    * @hidden
@@ -26,9 +26,9 @@ export class CodeSynth {
    * 
    * @returns an instance of a CodeSynth class.
    */
-  constructor({ language, model }: ConstructorOptions) {
+  constructor({ language, model, }: ConstructorOptions) {
     if (!isSupportedLanguage(language)) {
-      throw new Error(`Unsupported language: ${language}. Only one of ${JSON.stringify(SUPPORTED_LANGUAGES)} are supported.`);
+      throw new Error(`Unsupported language: ${language as string}. Only one of ${JSON.stringify(SUPPORTED_LANGUAGES)} are supported.`);
     }
     this.language = language;
     this.contortionist = new Contortionist({
@@ -39,31 +39,31 @@ export class CodeSynth {
 
   public async synthesize(
     prompt: string,
-    options: ExternalExecuteOptions<any>
-  ): Promise<any>;
+    options: ExternalExecuteOptions<undefined, boolean>
+  ): Promise<string>;
   public async synthesize(
     prompt: string,
     languageOptions: string | any,
-    options: ExternalExecuteOptions<any>
-  ): Promise<any>;
+    options: ExternalExecuteOptions<undefined, boolean>
+  ): Promise<string>;
   public async synthesize(
     prompt: string,
-    languageOptions: string | ExternalExecuteOptions<any>,
-    options?: ExternalExecuteOptions<any>,
-  ) {
+    languageOptions: string | ExternalExecuteOptions<undefined, boolean>,
+    options?: ExternalExecuteOptions<undefined, boolean>,
+  ): Promise<string> {
     if (options === undefined) {
-      options = languageOptions as ExternalExecuteOptions<any>;
+      options = languageOptions as ExternalExecuteOptions<undefined, boolean>;
       languageOptions = undefined;
     } else {
       if (this.language === 'sql') {
-        this.contortionist.grammar = getGrammar(this.language, languageOptions as any);
-        console.log(this.contortionist.grammar)
+        this.contortionist.grammar = getGrammar(this.language, languageOptions);
+        console.log(this.contortionist.grammar);
       } else if (this.language === 'json') {
-        const grammar = await compile(languageOptions, 'Root')
+        const grammar = await compile(languageOptions, 'Root');
         console.log(grammar);
         this.contortionist.grammar = grammar;
       } else {
-        throw new Error('I dont know this one')
+        throw new Error('I dont know this one');
       }
     }
     const builtPrompt = buildPrompt(prompt, this.language);
@@ -76,8 +76,8 @@ export class CodeSynth {
   };
 
   abort = () => {
-    console.log('abort!')
+    console.log('abort!');
     this.contortionist.abort();
-  }
+  };
 }
 
