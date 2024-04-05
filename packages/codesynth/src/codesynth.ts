@@ -1,7 +1,7 @@
 import Contortionist, { ExternalExecuteOptions, } from 'contort';
 import { getGrammar, } from './grammars/index.js';
 import { ConstructorOptions, SUPPORTED_LANGUAGES, SupportedLanguage, isSupportedLanguage, } from './types.js';
-import { buildPrompt, parseOptions, } from './utils.js';
+import { buildPrompt, } from './utils.js';
 import { Variables, } from './grammars/get-grammar.js';
 
 export class CodeSynth<L extends SupportedLanguage> {
@@ -66,8 +66,8 @@ export class CodeSynth<L extends SupportedLanguage> {
       }
     }
     const builtPrompt = buildPrompt(prompt, this.language);
-    const parsedOptions = parseOptions(options);
-    return await this.contortionist.execute(builtPrompt, parsedOptions,
+    // const parsedOptions = parseOptions(options);
+    return await this.contortionist.execute(builtPrompt, options,
       //   {
       //   // signal: this._abortController.signal,
       // }

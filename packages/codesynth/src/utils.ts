@@ -1,11 +1,11 @@
-import { ExternalExecuteOptions, } from "contort";
+// import { ExternalExecuteOptions, } from "contort";
 import { SupportedLanguage, } from "./types.js";
 
-export const parseOptions = (options: ExternalExecuteOptions<undefined, boolean>) => {
-  return {
-    ...options,
-  };
-};
+// export const parseOptions = (options: ExternalExecuteOptions<undefined, boolean>) => {
+//   return {
+//     ...options,
+//   };
+// };
 
 export const buildPrompt = (prompt: string, language: SupportedLanguage) => {
   return `
