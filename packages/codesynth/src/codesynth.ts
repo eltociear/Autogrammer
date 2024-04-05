@@ -1,4 +1,4 @@
-import Contortionist, { ExternalExecuteOptions } from 'contortionist';
+import Contortionist, { ExternalExecuteOptions } from 'contort';
 import { getGrammar } from './grammars/index.js';
 import { ConstructorOptions, SUPPORTED_LANGUAGES, SupportedLanguage, isSupportedLanguage } from './types.js';
 import { buildPrompt, parseOptions } from './utils.js';
@@ -37,7 +37,35 @@ export class CodeSynth {
     });
   }
 
-  synthesize = (prompt: string, options: ExternalExecuteOptions<any>) => {
+  public async synthesize(
+    prompt: string,
+    options: ExternalExecuteOptions<any>
+  ): Promise<any>;
+  public async synthesize(
+    prompt: string,
+    languageOptions: string | any,
+    options: ExternalExecuteOptions<any>
+  ): Promise<any>;
+  public async synthesize(
+    prompt: string,
+    languageOptions: string | ExternalExecuteOptions<any>,
+    options?: ExternalExecuteOptions<any>,
+  ) {
+    if (options === undefined) {
+      options = languageOptions as ExternalExecuteOptions<any>;
+      languageOptions = undefined;
+    } else {
+      if (this.language === 'sql') {
+        this.contortionist.grammar = getGrammar(this.language, languageOptions as any);
+        console.log(this.contortionist.grammar)
+      } else if (this.language === 'json') {
+        const grammar = await compile(languageOptions, 'Root')
+        console.log(grammar);
+        this.contortionist.grammar = grammar;
+      } else {
+        throw new Error('I dont know this one')
+      }
+    }
     const builtPrompt = buildPrompt(prompt, this.language);
     const parsedOptions = parseOptions(options);
     return this.contortionist.execute(builtPrompt, parsedOptions,

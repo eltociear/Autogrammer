@@ -7,16 +7,33 @@ insert_stmt ::= "INSERT INTO" table_name "VALUES" "(" value_list ")"
 update_stmt ::= "UPDATE" table_name "SET" set_clause [ where_clause ]
 
 delete_stmt ::= "DELETE FROM" table_name [ where_clause ]
+sql ::= query
+# sql ::= query | statement
 
-select_list ::= column_name [ "," column_name ]*
+#### Queries
 
-table_expr ::= table_name [ "AS" alias ] [ join_clause ]
+query ::= selectquery 
+# query ::= selectquery | insertquery | updatequery | deletequery
 
-join_clause ::= [ join_type ] "JOIN" table_name "ON" condition
+selectquery ::= "SELECT " selectlist (", " selectlist)* " FROM " tablename [" WHERE " condition] [" ORDERBY " columnname] [" LIMIT " integer]
 
-join_type ::= "INNER" | "LEFT" | "RIGHT" | "FULL"
+## select_list ::= column_name [ "," column_name ]*
+## 
+## table_expr ::= table_name [ "AS" alias ] [ join_clause ]
+## 
+## join_clause ::= [ join_type ] "JOIN" table_name "ON" condition
+## 
+## join_type ::= "INNER" | "LEFT" | "RIGHT" | "FULL"
 
 where_clause ::= "WHERE" condition
+selectlist ::= {{{selectlist}}}
+tablename ::=  {{{tablename}}}
+columnlist ::= string
+valuelist ::=  string
+setclause ::=  string
+condition ::=  string
+columnname ::= string
+ 
 
 order_clause ::= "ORDER BY" order_list
 
@@ -27,6 +44,11 @@ limit_clause ::= "LIMIT" number [ "OFFSET" number ]
 set_clause ::= column_name "=" value [ "," column_name "=" value ]*
 
 condition ::= expression [ "AND" | "OR" ] expression
+
+
+#### Statements
+
+statement ::= "ddlstatement" | "dmlstatement"
 
 expression ::= column_name comparison_operator value
 

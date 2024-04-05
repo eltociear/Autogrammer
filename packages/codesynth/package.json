@@ -11,29 +11,57 @@
     ".": "./dist/codesynth.js"
   },
   "scripts": {
-    "build": "wireit"
+    "lint": "wireit",
+    "test": "vitest",
+    "build": "wireit",
+    "build:check": "wireit",
+    "build:esm": "wireit",
+    "build:umd": "wireit"
   },
   "wireit": {
+    "lint": {
+      "command": "eslint -c .eslintrc.cjs src --ext .ts"
+    },
+    "build:check": {
+      "command": "path-exists ./dist/index.js && path-exists ./dist/index.umd.cjs && path-exists ./dist/index.d.ts "
+    },
+    "build:esm": {
+      "command": "tsc"
+    },
+    "build:umd": {
+      "command": "vite build"
+    },
     "build": {
-      "command": "rimraf ./dist && vite build",
+      "command": "rimraf ./dist && pnpm build:umd && pnpm build:esm && cp ../../README.md ./README.md && cp ../../LICENSE ./LICENSE",
       "files": [
-        "./src/**/*.json",
+        "../../README.md",
         "./src/**/*.ts",
-        "./src/**/*.js",
         "package.json",
         "vite.config.ts",
         "tsconfig.json"
       ],
       "output": [
-        "./dist/**"
+        "./dist/**",
+        "./README.md"
       ]
     }
   },
-  "keywords": [],
   "author": "Kevin Scott",
   "license": "MIT",
+  "keywords": [
+    "llm",
+    "code-generation",
+    "sql",
+    "json",
+    "llama.cpp",
+    "transformers.js",
+    "llamafile",
+    "gbnf",
+    "grammar"
+  ],
   "dependencies": {
-    "contortionist": "^0.0.4"
+    "contort": "^0.0.9",
+    "mustache": "^4.2.0"
   },
   "devDependencies": {
     "@types/jest": "^29.5.12",
