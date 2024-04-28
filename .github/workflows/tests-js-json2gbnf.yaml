@@ -1,12 +1,13 @@
-name: 'Tests // AutogrammerJS'
+name: 'Tests // JS / json2gbnf'
 on:
   # push:
   pull_request:
     paths:
-      # This covers _anything_ under the specific package directory, as well as
-      # this workflow file, and relevant JS files at the root.
-      - 'packages/autogrammerjs/**'
-      - '.github/workflows/tests-autogrammerjs.yaml'
+      # This covers _anything_ under the specific package directory,
+      # as well as this workflow file, and relevant JS files 
+      # at the root.
+      - 'packages/javascript/packages/json2gbnf/**'
+      - '.github/workflows/tests-js-json2gbnf.yaml'
       - 'package.json'
       - 'pnpm-lock.yaml'
       - 'pnpm-workspace.yaml'
@@ -56,11 +57,11 @@ jobs:
             ${{ runner.os }}-pnpm-store-
 
       - name: Install dependencies
-        working-directory: ./packages/autogrammerjs
+        working-directory: ./packages/javascript/packages/json2gbnf
         run: pnpm install
 
       - name: 'Lint'
-        working-directory: ./packages/autogrammerjs
+        working-directory: ./packages/javascript/packages/json2gbnf
         run: 'pnpm lint'
 
   unit-test:
@@ -96,18 +97,18 @@ jobs:
             ${{ runner.os }}-pnpm-store-
 
       - name: Install dependencies
-        working-directory: ./packages/autogrammerjs
+        working-directory: ./packages/javascript/packages/json2gbnf
         run: pnpm install
 
       - name: 'Test'
-        working-directory: ./packages/autogrammerjs
-        run: 'pnpm test -- --coverage'
+        working-directory: ./packages/javascript/packages/json2gbnf
+        run: 'pnpm test'
 
       - name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@v4.0.1
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
-          slug: thekevinscott/autogrammer
+          slug: thekevinscott/autogrammerionist
 
   build:
     name: 'Build'
@@ -142,13 +143,14 @@ jobs:
             ${{ runner.os }}-pnpm-store-
 
       - name: Install dependencies
-        working-directory: ./packages/autogrammerjs
+        working-directory: ./packages/javascript/packages/json2gbnf
         run: pnpm install
 
       - name: 'Build'
-        working-directory: ./packages/autogrammerjs
+        working-directory: ./packages/javascript/packages/json2gbnf
         run: 'pnpm build'
 
       - name: 'Check build output'
-        working-directory: ./packages/autogrammerjs
+        working-directory: ./packages/javascript/packages/json2gbnf
         run: 'pnpm build:check'
+
