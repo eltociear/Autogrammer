@@ -1,8 +1,8 @@
 import { vi, } from 'vitest';
 import { JSON2GBNF } from "./json2gbnf";
-import { SchemaParser } from "./schema-parser.js";
-import type * as _SchemaParser from './schema-parser.js';
-import { isSchemaObject } from './types.js';
+import { Grammar } from "./grammar.js";
+import type * as _Grammar from './grammar.js';
+import { hasDollarSchemaProp } from './type-guards.js';
 import type * as _types from './types.js';
 import { VALUE_KEY } from './constants/grammar-keys.js';
 import { parse } from './utils/parse.js';
@@ -16,25 +16,25 @@ vi.mock('./utils/parse.js', async () => {
   };
 });
 
-vi.mock('./schema-parser.js', async () => {
-  const actual = await vi.importActual('./schema-parser.js') as typeof _SchemaParser;
+vi.mock('./grammar.js', async () => {
+  const actual = await vi.importActual('./grammar.js') as typeof _Grammar;
   return {
     ...actual,
-    SchemaParser: vi.fn(),
+    Grammar: vi.fn(),
   };
 });
 
-vi.mock('./types.js', async () => {
-  const actual = await vi.importActual('./types.js') as typeof _types;
+vi.mock('./type-guards.js', async () => {
+  const actual = await vi.importActual('./type-guards.js') as typeof _types;
   return {
     ...actual,
-    isSchemaObject: vi.fn(),
+    hasDollarSchemaProp: vi.fn().mockReturnValue(false),
   };
 });
 
 describe('JSON2GBNF', () => {
   afterEach(() => {
-    vi.clearAllMocks();
+    vi.resetAllMocks();
   });
 
   test('it throws an error if schema is null', () => {
@@ -50,7 +50,7 @@ describe('JSON2GBNF', () => {
   });
 
   test('it throws an error if schema is an object with an unsupported schema version', () => {
-    vi.mocked(isSchemaObject).mockReturnValue(true);
+    vi.mocked(hasDollarSchemaProp).mockReturnValue(true);
     const schema = 'https://json-schema.org/draft/2020-11/schema';
     expect(() => JSON2GBNF({
       $schema: schema,
@@ -59,12 +59,12 @@ describe('JSON2GBNF', () => {
 
   test('it adds root rule if passed true', () => {
     const addRule = vi.fn();
-    vi.mocked(SchemaParser).mockImplementation(() => {
-      class MockSchemaParser {
+    vi.mocked(Grammar).mockImplementation(() => {
+      class MockGrammar {
         addRule = addRule;
         grammar = 'foo';
       }
-      return new MockSchemaParser() as any as SchemaParser;
+      return new MockGrammar() as any as Grammar;
     });
 
     expect(JSON2GBNF(true)).toEqual('foo');
@@ -73,12 +73,12 @@ describe('JSON2GBNF', () => {
 
   test('it adds root rule if passed an empty object', () => {
     const addRule = vi.fn();
-    vi.mocked(SchemaParser).mockImplementation(() => {
-      class MockSchemaParser {
+    vi.mocked(Grammar).mockImplementation(() => {
+      class MockGrammar {
         addRule = addRule;
         grammar = 'foo';
       }
-      return new MockSchemaParser() as any as SchemaParser;
+      return new MockGrammar() as any as Grammar;
     });
 
     expect(JSON2GBNF({})).toEqual('foo');
@@ -86,15 +86,15 @@ describe('JSON2GBNF', () => {
   });
 
   test('it returns a string if schema is an object', () => {
-    class MockSchemaParser {
+    class MockGrammar {
       grammar = 'foo';
       addRule = vi.fn();
       getConst = vi.fn();
       opts = {};
     }
 
-    const mockParser = new MockSchemaParser() as any as SchemaParser;
-    vi.mocked(SchemaParser).mockImplementation(() => {
+    const mockParser = new MockGrammar() as any as Grammar;
+    vi.mocked(Grammar).mockImplementation(() => {
       return mockParser;
     });
 
