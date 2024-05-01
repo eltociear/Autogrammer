@@ -1,0 +1,25 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "lib": ["ESNext", "dom"],
+    "outDir": "./dist",
+    "rootDir": "./src",
+    "moduleResolution": "Bundler",
+    "module": "ESNext",
+    "target": "esnext",
+    "skipLibCheck": true,
+    // "module": "nodenext",
+    // "moduleResolution": "nodenext",
+    "resolveJsonModule": true,
+    "sourceMap": true
+  },
+  "include": ["./src/**/*.ts"],
+  "exclude": [
+    "node_modules",
+    ".vscode-test",
+    "dist",
+    ".wireit",
+    "env",
+    "./src/**/*.test.ts"
+  ]
+}

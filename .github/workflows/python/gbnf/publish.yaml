@@ -1,0 +1,16 @@
+name: Publish gbnf (Python) to PyPI
+
+on:
+  push:
+    tags:
+      - "py/gbnf-v*"
+
+jobs:
+  publish:
+    uses: ./.github/workflows/shared/python/publish.yaml
+    with:
+      package: "./packages/gbnf/python"
+
+permissions:
+  id-token: write
+  contents: read

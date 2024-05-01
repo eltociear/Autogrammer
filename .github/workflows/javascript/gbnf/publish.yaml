@@ -1,0 +1,12 @@
+name: Publish gbnf (Javascript) to NPM
+
+on:
+  push:
+    tags:
+      - "js/gbnf-v*"
+
+jobs:
+  publish:
+    uses: ./.github/workflows/shared/javascript/publish.yaml
+    with:
+      package: "./packages/gbnf/javascript"

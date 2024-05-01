@@ -1,0 +1,12 @@
+name: Publish contort (Javascript) to NPM
+
+on:
+  push:
+    tags:
+      - "js/contort-v*"
+
+jobs:
+  publish:
+    uses: ./.github/workflows/shared/javascript/publish.yaml
+    with:
+      package: "./packages/contort/javascript"
