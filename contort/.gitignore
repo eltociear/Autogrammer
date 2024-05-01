@@ -1,0 +1,9 @@
+.DS_Store
+node_modules
+dist
+env
+.wireit
+.parcel-cache
+.mypy-cache
+tmp
+vite.config.ts.timestamp-*

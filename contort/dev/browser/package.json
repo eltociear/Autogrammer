@@ -1,0 +1,27 @@
+{
+  "name": "@dev/browser",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "dev": "wireit"
+  },
+  "wireit": {
+    "dev": {
+      "command": "vite --host --config ./vite.config.ts --port 5172",
+      "dependencies": []
+    }
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@mlc-ai/web-llm": "^0.2.35",
+    "@vanillawc/wc-monaco-editor": "^1.10.15",
+    "@xenova/transformers": "github:xenova/transformers.js"
+  },
+  "devDependencies": {
+    "vite": "^5.1.5",
+    "vite-plugin-node-polyfills": "^0.21.0",
+    "wireit": "^0.14.4"
+  }
+}

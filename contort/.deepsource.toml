@@ -1,0 +1,29 @@
+version = 1
+
+test_patterns = [
+  "packages/contort/src/**/*.ts",
+  "packages/contort/src/**/*.ts",
+]
+
+exclude_patterns = [
+  "packages/contort/src/**/*.test.ts", 
+  "packages/contort/test/**/*.ts", 
+  "packages/contort/src/**/*.test.ts", 
+  "packages/contort/test/**/*.ts", 
+  # "examples/**", 
+  # "scripts/**", 
+  # "test/**", 
+  "dev/**",
+]
+
+[[analyzers]]
+name = "javascript"
+enabled = true
+
+  [analyzers.meta]
+  environment = [
+    "browser",
+    "nodejs",
+    "vitest"
+  ]
+  dialect = "typescript"
