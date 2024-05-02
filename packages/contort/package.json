@@ -5,7 +5,8 @@
   "description": "Control what LLMs can, and can't, say",
   "repository": {
     "type": "git",
-    "url": "https://github.com/thekevinscott/autogrammer.git"
+    "url": "https://github.com/thekevinscott/autogrammer.git",
+    "directory": "packages/contort"
   },
   "main": "./dist/index.umd.cjs",
   "module": "./dist/index.js",
@@ -18,11 +19,13 @@
   "scripts": {
     "copy:package-files": "wireit",
     "lint": "wireit",
-    "test:unit": "pnpm test",
-    "test": "vitest",
-    "test:integration": "vitest --config ./vitest.config.ts --pool=forks --bail 1",
+    "test:unit": "wireit",
+    "test": "wireit",
+    "test:integration": "wireit",
     "clean": "wireit",
     "build": "wireit",
+    "build:esm": "wireit",
+    "build:umd": "wireit",
     "build:check": "wireit"
   },
   "wireit": {
@@ -30,18 +33,43 @@
       "command": "rimraf ./dist"
     },
     "lint": {
-      "command": "eslint -c ../../.eslintrc.cjs src --ext .ts"
+      "command": "eslint -c ./.eslintrc.cjs src --ext .ts",
+      "dependencies": [
+        "../gbnf/javascript:build"
+      ]
+    },
+    "test:unit": {
+      "command": "vitest --config ./vitest.config.unit.ts run",
+      "dependencies": [
+        "../gbnf/javascript:build"
+      ]
+    },
+    "test": {
+      "command": "pnpm test:unit && pnpm test:integration "
+    },
+    "test:integration": {
+      "command": "vitest --config ./vitest.config.integration.ts --pool=forks --bail 1 run",
+      "dependencies": [
+        "../mock-llm-api:build",
+        "../gbnf/javascript:build"
+      ]
     },
     "build:check": {
-      "command": "path-exists ./dist/index.umd.cjs "
+      "command": "ls ./dist && path-exists ./dist/index.js && path-exists ./dist/index.umd.cjs && path-exists ./dist/index.d.ts"
+    },
+    "build:esm": {
+      "command": "vite build -c vite.config.esm.ts"
+    },
+    "build:umd": {
+      "command": "vite build -c vite.config.umd.ts"
     },
     "copy:package-files": {
-      "command": "cp ../../README.md ./README.md && cp ../../LICENSE ./LICENSE"
+      "command": "cp ../../LICENSE ./LICENSE"
     },
     "build": {
-      "command": "vite build && pnpm copy:package-files && pnpm build:check",
+      "command": "pnpm clean && pnpm build:esm && pnpm build:umd && pnpm copy:package-files && pnpm build:check",
       "dependencies": [
-        "clean"
+        "../gbnf/javascript:build"
       ],
       "files": [
         "../../README.md",
@@ -49,12 +77,13 @@
         "./src/**/*.ts",
         "package.json",
         "vite.config.ts",
+        "vite.config.umd.ts",
+        "vite.config.esm.ts",
         "tsconfig.json"
       ],
       "output": [
         "./dist/**",
-        "./LICENSE",
-        "./README.md"
+        "./LICENSE"
       ]
     }
   },
@@ -71,39 +100,40 @@
     "grammar"
   ],
   "dependencies": {
-    "gbnf": "^0.1.4"
+    "gbnf": "workspace:*"
   },
   "devDependencies": {
-    "mock-llm-api": "workspace:*",
     "@mlc-ai/web-llm": "^0.2.35",
     "@mlc-ai/web-tokenizers": "^0.1.3",
     "@rollup/plugin-typescript": "^11.1.6",
+    "@schemastore/package": "^0.0.10",
+    "@types/express": "^4.17.21",
+    "@types/fs-extra": "^11.0.4",
     "@types/jest": "^29.5.12",
     "@typescript-eslint/eslint-plugin": "^7.3.1",
     "@vitest/coverage-istanbul": "^1.4.0",
     "@vitest/coverage-v8": "^1.5.3",
     "@xenova/transformers": "^2.16.0",
+    "cors": "^2.8.5",
     "eslint": "^8.57.0",
     "eslint-config-prettier": "^9.1.0",
+    "express": "^4.19.2",
+    "fs-extra": "^11.2.0",
+    "mock-llm-api": "workspace:*",
     "path-exists-cli": "^2.0.0",
+    "playwright": "^1.43.0",
     "rimraf": "^5.0.5",
     "rollup": "^4.12.1",
     "rollup-plugin-dts": "^6.1.0",
     "rollup-plugin-esbuild": "^6.1.1",
     "rollup-plugin-string": "^3.0.0",
+    "testeroni": "^0.1.0",
     "tslib": "^2.6.2",
     "typescript": "^5.3.3",
     "vite": "^5.1.5",
     "vite-plugin-dts": "^3.7.3",
     "vite-plugin-externalize-deps": "^0.8.0",
-    "vitest": "^1.4.0",
-    "wireit": "^0.14.4",
-    "@schemastore/package": "^0.0.10",
-    "@types/fs-extra": "^11.0.4",
-    "cors": "^2.8.5",
-    "express": "^4.19.2",
-    "fs-extra": "^11.2.0",
-    "playwright": "^1.43.0",
-    "testeroni": "^0.1.0"
+    "vitest": "^1.5.3",
+    "wireit": "^0.14.4"
   }
 }

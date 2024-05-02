@@ -5,15 +5,18 @@
   "version": "0.0.1",
   "repository": {
     "type": "git",
-    "url": "https://github.com/thekevinscott/autogrammer.git"
+    "url": "https://github.com/thekevinscott/autogrammer.git",
+    "directory": "packages/autogrammer"
   },
   "main": "./dist/autogrammer.js",
   "exports": {
     ".": "./dist/autogrammer.js"
   },
   "scripts": {
+    "clean": "wireit",
     "lint": "wireit",
-    "test": "vitest",
+    "test:unit": "wireit",
+    "test": "wireit",
     "build": "wireit",
     "build:check": "wireit",
     "build:esm": "wireit",
@@ -21,10 +24,27 @@
   },
   "wireit": {
     "lint": {
-      "command": "eslint -c .eslintrc.cjs src --ext .ts"
+      "command": "eslint -c .eslintrc.cjs src --ext .ts",
+      "dependencies": [
+        "../../json2gbnf/javascript:build",
+        "../../contort:build"
+      ]
+    },
+    "test:unit": {
+      "command": "vitest --config ./vite.config.ts run",
+      "dependencies": [
+        "../../json2gbnf/javascript:build",
+        "../../contort:build"
+      ]
+    },
+    "clean": {
+      "command": "rimraf ./dist"
+    },
+    "test": {
+      "command": "pnpm test:unit"
     },
     "build:check": {
-      "command": "path-exists ./dist/index.js && path-exists ./dist/index.umd.cjs && path-exists ./dist/index.d.ts && path-exists ./LICENSE"
+      "command": "ls ./dist && path-exists ./dist/index.js && path-exists ./dist/index.umd.cjs && path-exists ./dist/index.d.ts && path-exists ./LICENSE"
     },
     "build:esm": {
       "command": "tsc"
@@ -33,14 +53,20 @@
       "command": "vite build"
     },
     "build": {
-      "command": "rimraf ./dist && pnpm build:umd && pnpm build:esm && cp ../../../../LICENSE ./LICENSE",
+      "command": "pnpm clean && pnpm build:umd && pnpm build:esm && cp ../../../LICENSE ./LICENSE",
+      "dependencies": [
+        "../../json2gbnf/javascript:build",
+        "../../contort:build"
+      ],
       "files": [
         "./src/**/*.ts",
+        "!./src/**/*.test.ts",
         "package.json",
         "vite.config.ts",
         "tsconfig.json"
       ],
       "output": [
+        "./LICENSE",
         "./dist/**"
       ]
     }
@@ -59,7 +85,7 @@
     "grammar"
   ],
   "dependencies": {
-    "contort": "^0.0.10",
+    "contort": "workspace:*",
     "json2gbnf": "workspace:*",
     "mustache": "^4.2.0"
   },

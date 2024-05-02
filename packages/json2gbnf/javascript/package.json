@@ -5,7 +5,8 @@
   "version": "0.0.4",
   "repository": {
     "type": "git",
-    "url": "https://github.com/thekevinscott/autogrammer.git"
+    "url": "https://github.com/thekevinscott/autogrammer.git",
+    "directory": "packages/json2gbnf"
   },
   "files": [
     "dist"
@@ -22,7 +23,8 @@
     "copy:gbnf": "wireit",
     "copy:assets": "wireit",
     "lint": "wireit",
-    "test": "vitest",
+    "test:unit": "wireit",
+    "test": "wireit",
     "build": "wireit",
     "build:check": "wireit",
     "build:esm": "wireit",
@@ -32,31 +34,53 @@
     "copy:gbnf": {
       "command": "cpx \"./src/**/*.gbnf\" ./dist -v"
     },
+    "test:unit": {
+      "command": "vitest --config ./vite.config.ts run",
+      "dependencies": [
+        "../../gbnf/javascript:build"
+      ]
+    },
+    "test": {
+      "command": "pnpm test:unit"
+    },
     "copy:assets": {
-      "command": "cp ../../../../LICENSE ./LICENSE "
+      "command": "cp ../../../LICENSE ./LICENSE "
     },
     "lint": {
-      "command": "eslint -c .eslintrc.cjs src --ext .ts"
+      "command": "eslint -c .eslintrc.cjs src --ext .ts",
+      "dependencies": [
+        "../../gbnf/javascript:build"
+      ]
     },
     "build:check": {
-      "command": "path-exists ./dist/index.js && path-exists ./dist/index.umd.cjs && path-exists ./dist/index.d.ts && path-exists ./README.md && path-exists ./LICENSE"
+      "command": "ls ./dist && path-exists ./dist/index.js && path-exists ./dist/index.umd.cjs && path-exists ./dist/index.d.ts && path-exists ./LICENSE"
     },
     "build:esm": {
-      "command": "tsc -p ./tsconfig.json"
+      "command": "vite build -c ./vite.config.esm.ts",
+      "dependencies": [
+        "../../gbnf/javascript:build"
+      ]
     },
     "build:umd": {
-      "command": "vite build"
+      "command": "vite build -c ./vite.config.umd.ts",
+      "dependencies": [
+        "../../gbnf/javascript:build"
+      ]
     },
     "build": {
       "command": "rimraf ./dist && pnpm build:umd && pnpm build:esm && pnpm copy:assets && pnpm copy:gbnf",
       "files": [
         "./src/**/*.ts",
+        "!./src/**/*.test.ts",
         "./src/**/*.gbnf",
         "package.json",
         "vite.config.ts",
+        "vite.config.umd.ts",
+        "vite.config.esm.ts",
         "tsconfig.json"
       ],
       "output": [
+        "./LICENSE",
         "./dist/**"
       ]
     }
@@ -75,7 +99,7 @@
     "@typescript-eslint/eslint-plugin": "^7.3.1",
     "eslint": "^8.57.0",
     "eslint-config-prettier": "^9.1.0",
-    "gbnf": "^0.1.6",
+    "gbnf": "workspace:*",
     "path-exists-cli": "^2.0.0",
     "cpx2": "^7.0.1",
     "prettier": "^3.2.5",

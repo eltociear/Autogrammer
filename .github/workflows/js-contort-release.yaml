@@ -8,9 +8,9 @@ on:
 jobs:
   release:
     name: "Cut Release for contort (Javascript)"
-    uses: ./.github/workflows/shared/javascript/release.yaml
+    uses: ./.github/workflows/js-shared-release.yaml
 
     with:
-      package: "./packages/contort/javascript"
+      package: "./packages/contort"
       files: |
         packages/contort/javascript/contort-*.tgz
