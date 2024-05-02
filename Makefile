@@ -54,28 +54,28 @@ lint:
 
 build_js:
 	cd packages/autogrammer/javascript \
-	&& make build \
+	&& make build_all \
 	&& cd - \
 	&& cd packages/contort \
-	&& make build \
+	&& make build_all \
 	&& cd - \
 	&& cd packages/gbnf/javascript \
-	&& make build \
+	&& make build_all \
 	&& cd - \
 	&& cd packages/json2gbnf/javascript \
 	&& make build
 
 build_py:
 	cd packages/autogrammer/python \
-	&& make build \
+	&& make build_all \
 	&& cd - \
 	&& cd packages/gbnf/python \
-	&& make build \
+	&& make build_all \
 	&& cd - \
 	&& cd packages/json2gbnf/python \
 	&& make build
 
-build:
+build_all:
 	make build_js && make build_py
 
 init_py:

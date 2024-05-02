@@ -65,5 +65,5 @@ jobs:
       - name: Install dependencies
         run: pnpm install
 
-      - run: make build
+      - run: make build_all
         working-directory: ${{ inputs.package }}

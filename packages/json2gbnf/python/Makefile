@@ -12,7 +12,7 @@ lint:
 copy_assets:
 	cp ../../../LICENSE ./ 
 
-build:
+build_all:
 	make copy_assets && make build_package
 
 build_package:
