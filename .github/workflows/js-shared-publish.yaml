@@ -16,7 +16,7 @@ jobs:
 
       - uses: actions/setup-node@v4
         with:
-          node-version: '20.x'
+          node-version: '22.x'
           registry-url: 'https://registry.npmjs.org'
 
       - uses: pnpm/action-setup@v3
@@ -49,6 +49,10 @@ jobs:
       - name: 'Check build output'
         working-directory: ${{ inputs.package }}
         run: 'pnpm build:check'
+      - name: Setup tmate session
+        uses: mxschmitt/action-tmate@v3
+        with:
+          detached: true
 
       - run: pnpm publish --no-git-checks --provenance --access public
         working-directory: ${{ inputs.package }}
