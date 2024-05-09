@@ -50,9 +50,14 @@ jobs:
         working-directory: ${{ inputs.package }}
         run: pnpx playwright install  
 
+      # - name: Setup tmate session
+      #   uses: mxschmitt/action-tmate@v3
+      #   with:
+      #     detached: true
+
       - name: 'Integration Test'
         working-directory: ${{ inputs.package }}
-        run: 'pnpm test:integration'
+        run: 'NODE_OPTIONS=--trace-deprecation pnpm test:integration'
 
       - name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@v4.0.1

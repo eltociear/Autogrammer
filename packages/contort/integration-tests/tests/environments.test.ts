@@ -175,7 +175,8 @@ describe('llama.cpp', async () => {
       }],
     ] as [string, string, BundleOptions][])('%s', async (bundlerName, windowContortName, bundleOptions) => {
       const browserDir = path.resolve(TMP, 'browser');
-      const outDir = path.resolve(browserDir, bundlerName);
+      const workingDir = path.resolve(browserDir, bundlerName);
+      const outDir = path.resolve(workingDir, 'build');
 
       const browserRunner = new ClientsideTestRunner({
         log: false,
@@ -186,13 +187,20 @@ describe('llama.cpp', async () => {
 
       beforeAll(async function beforeAll() {
         await mkdirp(outDir);
-        await browserRunner.beforeAll(() => bundle(bundlerName, outDir, bundleOptions));
+        await browserRunner.beforeAll(() => bundle(bundlerName, outDir, {
+          ...bundleOptions,
+          workingDir,
+        }));
       });
 
       afterAll(async () => {
         await Promise.all([
           rimraf((await readdir(browserDir)).length > 1 ? outDir : browserDir),
-          browserRunner.afterAll(),
+          async () => {
+            try {
+              browserRunner.afterAll();
+            } catch (err) { }
+          },
         ]);
       });
 
