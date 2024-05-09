@@ -8,6 +8,6 @@ on:
 jobs:
   publish:
     uses: ./.github/workflows/js-shared-publish.yaml
+    secrets: inherit
     with:
       package: "./packages/json2gbnf/javascript"
-    secrets: inherit
