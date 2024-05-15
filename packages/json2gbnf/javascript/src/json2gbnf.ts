@@ -1,6 +1,7 @@
+import { GLOBAL_CONSTANTS, } from './constants/constants.js';
 import { VALUE_KEY, } from './constants/grammar-keys.js';
 import {
-  Grammar,
+  Grammar as Grammar,
 } from './grammar.js';
 import {
   isEmptyObject,
@@ -11,10 +12,13 @@ import {
   type SchemaOpts,
 } from './types.js';
 import { parse, } from './utils/parse.js';
+import { joinWith, } from 'gbnf';
 
 // https://json-schema.org/understanding-json-schema/basics
 // false will always be invalid
 export const BLANK_GRAMMAR = `root ::= ""`;
+
+export const ROOT_ID = 'json2gbnf';
 
 export function JSON2GBNF<T extends JSONSchema>(
   // eslint-disable-next-line @typescript-eslint/ban-types
@@ -33,10 +37,18 @@ export function JSON2GBNF<T extends JSONSchema>(
 
   const parser = new Grammar(opts);
   if (schema === true || isEmptyObject(schema)) {
-    parser.addRule(VALUE_KEY, 'root');
+    parser.addRule(VALUE_KEY, ROOT_ID);
   } else {
-    parse(parser, schema, 'root');
+    parse(
+      parser,
+      schema,
+      ROOT_ID,
+    );
   }
 
-  return parser.grammar;
+  return joinWith('\n',
+    `root ::= ${ROOT_ID}`,
+    ...parser.grammar,
+    ...GLOBAL_CONSTANTS,
+  );
 };

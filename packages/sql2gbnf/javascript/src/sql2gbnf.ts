@@ -1,13 +1,28 @@
-import { Grammar, } from "./grammar.js";
+import {
+  GrammarBuilder,
+  joinWith,
+} from "gbnf";
 import { parse, } from "./parse.js";
+import { GLOBAL_CONSTANTS, } from "./constants/constants.js";
 
+const ROOT_ID = 'sql2gbnf';
 
 export function SQL2GBNF(
-  // eslint-disable-next-line @typescript-eslint/ban-types
-  schema?: string,
+  // schema?: string,
 ): string {
-  const parser = new Grammar({});
-  parse(parser, 'root', schema);
+  const parser = new GrammarBuilder({
+    whitespace: 1,
+  });
 
-  return parser.grammar;
+  parse(
+    parser,
+    ROOT_ID,
+    // schema,
+  );
+
+  return joinWith('\n',
+    `root ::= ${ROOT_ID}`,
+    ...parser.grammar,
+    ...GLOBAL_CONSTANTS,
+  );
 };
