@@ -41,6 +41,9 @@ jobs:
 
       - name: 'Pull, rebase, and push'
         run: |
+          git config --global user.name 'Kevin Scott'
+          git config --global user.email '151596+thekevinscott@users.noreply.github.com'
+          git push --set-upstream origin main
           git pull --rebase
           git push origin HEAD:main
         env:
