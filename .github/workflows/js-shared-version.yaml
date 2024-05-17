@@ -48,12 +48,9 @@ jobs:
 
       - name: 'Pull, rebase, and push'
         run: |
-          echo "token $GITHUB_TOKEN"
-          git config --global user.name 'Kevin Scott'
-          git config --global user.email '151596+thekevinscott@users.noreply.github.com'
+          # git config --global user.name 'CI'
+          # git config --global user.email '151596+thekevinscott@users.noreply.github.com'
           git pull --rebase
-          git remote rm origin
-          git remote add origin https://${{ secrets.GH_TOKEN}}@github.com/thekevinscott/Autogrammer
           git push origin HEAD:main
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
