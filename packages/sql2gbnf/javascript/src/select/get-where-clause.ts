@@ -1,9 +1,9 @@
 import {
   join,
-  joinPipe,
 } from "gbnf";
 import { opt, } from "./get-optional.js";
 import { star, } from "./get-star.js";
+import { any, } from "../utils/any.js";
 
 export const getWhereClause = ({
   not,
@@ -25,5 +25,5 @@ export const getWhereClause = ({
   opt(mandatoryWhitespace, not),
   mandatoryWhitespace,
   whereClauseInner,
-  star(joinPipe(andMore, orMore)),
+  star(any(andMore, orMore)),
 );

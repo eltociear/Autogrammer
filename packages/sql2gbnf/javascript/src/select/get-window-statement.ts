@@ -1,28 +1,24 @@
 import {
   join,
-  joinPipe,
 } from "gbnf";
 import { rule, } from "./get-rule.js";
 import { opt, } from "./get-optional.js";
-import {
-  LEFT_PAREN_KEY,
-  RIGHT_PAREN_KEY,
-} from "../constants/grammar-keys.js";
+import { any, } from "../utils/any.js";
 
 export const getWindowStatement = ({
   rank,
   denserank,
   rownumber,
-  overStatement,
-  alias,
   colName,
   comma,
   positiveInteger,
   lead,
   lag,
   optionalRecommendedWhitespace,
-  whitespace: ws,
+  // whitespace: ws,
   optionalNonRecommendedWhitespace,
+  leftparen,
+  rightparen,
 }: {
   optionalNonRecommendedWhitespace: string;
   whitespace: string,
@@ -30,29 +26,29 @@ export const getWindowStatement = ({
   rank: string;
   denserank: string;
   rownumber: string;
-  overStatement: string;
-  alias: string;
   colName: string;
   comma: string;
   positiveInteger: string;
   lead: string;
   lag: string;
+  leftparen: string;
+  rightparen: string;
 }) => join(
-  rule(joinPipe(
+  any(
     rule(
-      rule(joinPipe(
+      any(
         rank,
         denserank,
         rownumber,
-      )),
+      ),
       `"()"`,
     ),
     rule(
-      rule(joinPipe(
+      any(
         lead,
         lag,
-      )),
-      LEFT_PAREN_KEY,
+      ),
+      leftparen,
       optionalNonRecommendedWhitespace,
       colName,
       comma,
@@ -64,10 +60,7 @@ export const getWindowStatement = ({
         positiveInteger,
       ),
       optionalNonRecommendedWhitespace,
-      RIGHT_PAREN_KEY,
+      rightparen,
     ),
-  )),
-  ws,
-  overStatement,
-  alias,
+  ),
 );
