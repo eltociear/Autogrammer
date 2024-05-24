@@ -1,7 +1,6 @@
 import {
   BOOLEAN,
   COMMA_KEY,
-  NULL_KEY,
   NUMBER,
   DOUBLE_QUOTE_KEY,
   SINGLE_QUOTE_KEY,
@@ -53,7 +52,6 @@ import {
   STRING_WITH_SINGLE_QUOTES,
   STRING_OPS,
   TABLE,
-  VALUE,
   WHERE,
   WHERE_CLAUSE,
   WHERE_INNER,
@@ -100,11 +98,10 @@ import {
   OFFSET,
   INTO,
   JOIN_CONDITION,
-  EQUIJOIN_CONDITION,
   PROJECTION_WITH_SPECIFIC_COLUMNS,
   COUNT_AGGREGATOR_RULE,
   OTHER_AGGREGATORS_RULE,
-  QUOTE,
+  // QUOTE,
   VALID_NAME,
   VALID_FULL_NAME,
 } from "../gbnf-keys.js";
@@ -131,12 +128,12 @@ import { getOverStatement, } from "./get-over-statement.js";
 import { getWindowStatement, } from "./get-window-statement.js";
 import { getWhitespaceDefs, } from "./get-whitespace-def.js";
 import { CaseKind, WhitespaceKind, } from "../types.js";
-import { getEquijoinCondition, getJoinCondition, } from "./get-join-condition.js";
+import { getJoinCondition, } from "./get-join-condition.js";
 import { any, } from "../utils/any.js";
 import { getCountAggregator, } from "./get-column-count-aggregator.js";
 import { getOtherAggregators, } from "./get-other-aggregators.js";
 import { star, } from "./get-star.js";
-import { validNameDef, } from "../constants/grammar-definitions.js";
+import { positiveIntegerDef, validNameDef, } from "../constants/grammar-definitions.js";
 
 export const select = (
   parser: GrammarBuilder,
@@ -162,7 +159,7 @@ export const select = (
     optionalNonRecommendedWhitespace,
     whitespace: mandatoryWhitespace,
   } = getWhitespaceDefs(parser, whitespaceKind);
-  const quote = parser.addRule(any(SINGLE_QUOTE_KEY, DOUBLE_QUOTE_KEY), QUOTE);
+  // const quote = parser.addRule(any(SINGLE_QUOTE_KEY, DOUBLE_QUOTE_KEY), QUOTE);
   const equalOps = parser.addRule(any(
     `"="`,
     `"!="`,
@@ -306,16 +303,17 @@ export const select = (
     stringWithDoubleQuotesKey,
   )})`, STRING_WITH_QUOTES);
   const stringWildcard = stringWithQuotes;
-  const valueKey = parser.addRule(any(
-    NUMBER,
-    NULL_KEY,
-    BOOLEAN,
-    stringWithQuotes,
-  ), VALUE);
-  const anyWhereClause = parser.addRule(join(
+  // const valueKey = parser.addRule(any(
+  //   NUMBER,
+  //   NULL_KEY,
+  //   BOOLEAN,
+  //   stringWithQuotes,
+  // ), VALUE);
+  const equalClause = parser.addRule(join(
     equalOps,
     optionalRecommendedWhitespace,
-    valueKey,
+    any(validFullName, positiveIntegerDef, stringWithQuotes),
+    // valueKey,
   ),
     ANY_WHERE_CLAUSE
   );
@@ -377,9 +375,12 @@ export const select = (
     ),
   ), BETWEEN_WHERE_CLAUSE);
   const whereClauseInner = parser.addRule(join(
+    // tableName,
     validFullName,
+    // '[a-zA-Z0-9.]*',
+    // '"T2.id"',
     any(
-      rule(optionalRecommendedWhitespace, anyWhereClause),
+      rule(optionalRecommendedWhitespace, equalClause),
       rule(optionalRecommendedWhitespace, numericClause),
       rule(optionalRecommendedWhitespace, wildcardClause),
       rule(optionalRecommendedWhitespace, betweenClause),
@@ -432,18 +433,19 @@ export const select = (
     rule(KEYS[RIGHT], mandatoryWhitespace),
     rule(fullOuter),
   ), JOIN_TYPE);
-  const equijoinCondition = parser.addRule(getEquijoinCondition({
-    tableName,
-    optionalRecommendedWhitespace,
-    validColName: validFullName,
-    quote,
-  }), EQUIJOIN_CONDITION);
+  // const equijoinCondition = parser.addRule(getEquijoinCondition({
+  //   tableName,
+  //   optionalRecommendedWhitespace,
+  //   whereClauseInner,
+  //   validColName: validFullName,
+  //   quote,
+  // }), EQUIJOIN_CONDITION);
   const joinCondition = parser.addRule(getJoinCondition({
     optionalRecommendedWhitespace,
     optionalNonRecommendedWhitespace,
     leftParen: LEFT_PAREN_KEY,
     rightParen: RIGHT_PAREN_KEY,
-    equijoinCondition,
+    equijoinCondition: whereClauseInner,
     whitespace: mandatoryWhitespace,
     and: KEYS[AND],
     or: KEYS[OR],
