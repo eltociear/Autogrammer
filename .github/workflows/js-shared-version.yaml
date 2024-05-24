@@ -54,6 +54,7 @@ jobs:
           git push origin tag $NEW_TAG
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+          NEW_TAG: ${{ steps.version-bump.outputs.newTag }}
 
 permissions:
   contents: read
