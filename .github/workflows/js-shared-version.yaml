@@ -34,12 +34,12 @@ jobs:
           PACKAGEJSON_DIR:  ${{ inputs.package }}
           version-type:  'patch'
 
-      - name: Setup tmate session
-        uses: mxschmitt/action-tmate@v3
-        with:
-          detached: true
-        env:
-          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+      # - name: Setup tmate session
+      #   uses: mxschmitt/action-tmate@v3
+      #   with:
+      #     detached: true
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
 
       - name: 'New Tag'
         env:
@@ -48,8 +48,7 @@ jobs:
 
       - name: 'Pull, rebase, and push'
         run: |
-          git remote set-url origin https://${{ secrets.GH_TOKEN}}@github.com/thekevinscott/autogrammer.git
-          # git remote -v
+          git remote set-url origin https://${{ secrets.GH_TOKEN}}@github.com/thekevinscott/Autogrammer.git
           git pull --rebase
           git push origin HEAD:main
         env:
