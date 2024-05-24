@@ -51,6 +51,7 @@ jobs:
           git remote set-url origin https://${{ secrets.GH_TOKEN}}@github.com/thekevinscott/Autogrammer.git
           git pull --rebase
           git push origin HEAD:main
+          git push origin tag $NEW_TAG
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
 
