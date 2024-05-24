@@ -50,8 +50,7 @@ jobs:
         run: |
           # git config --global user.name 'CI'
           # git config --global user.email '151596+thekevinscott@users.noreply.github.com'
-          echo "gh token $GH_TOKEN"
-          echo "gh token $GITHUB_TOKEN"
+          git remote set-url origin https://${{ secrets.GH_TOKEN}}@github.com/.git
           git pull --rebase
           git push origin HEAD:main
         env:
