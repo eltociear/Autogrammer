@@ -1,27 +1,23 @@
 import {
   GrammarBuilder,
-  $,
+  _,
 } from "gbnf/builder-v2";
 import type {
   CaseKind,
   Database,
   WhitespaceKind,
 } from "../types.js";
-import { star, } from "../utils/get-star.js";
 import {
   NULL,
-  VALUE,
 } from "../gbnf-keys.js";
 import { getInsertQuery, } from "./get-insert-query.js";
 import { rule, } from "../utils/get-rule.js";
 import {
   BOOLEAN,
-  COMMA_KEY,
   LEFT_PAREN_KEY,
   NUMBER,
   RIGHT_PAREN_KEY,
 } from "../constants/grammar-keys.js";
-import { any, } from "../utils/any.js";
 import {
   select as getSelectRule,
 } from '../select/index.js';
@@ -49,15 +45,6 @@ export const insert = (
     validFullName: string;
   }
 ): string => {
-  const columnList = rule(
-    validFullName,
-    star(
-      COMMA_KEY,
-      optionalRecommendedWhitespace,
-      validFullName,
-    ),
-  );
-
   const selectRule = rule(getSelectRule(parser, KEYS, opts, database, {
     validFullName,
     stringWithQuotes,
@@ -68,35 +55,30 @@ export const insert = (
     singleColumn: true,
   }));
 
-  const value = parser.addRule(any(
-    stringWithQuotes,
-    NUMBER,
-    BOOLEAN,
-    NULL,
-    any(
-      selectRule,
-      rule(
-        LEFT_PAREN_KEY,
-        selectRule,
-        RIGHT_PAREN_KEY,
-      ),
-    ),
-  ), VALUE);
+  const value = _`(${stringWithQuotes} | ${NUMBER} | ${BOOLEAN} | ${NULL} | ${selectRule} | "(" ${selectRule} ")")`;
 
-  const valuesList = rule(
-    value,
-    star(
-      COMMA_KEY,
-      optionalRecommendedWhitespace,
-      value,
-    ),
-  );
+  const valuesList = 'values-list';
+  addShorthand(_.key(valuesList)`
+  (
+    ${value}
+    (
+      "," ${optionalRecommendedWhitespace} ${value}
+    )*
 
-  const INSERT = 'insert';
-  addShorthand($.key(INSERT)`INSERT INTO `, parser);
+  )
+  `, parser);
 
-  return getInsertQuery({
-    insert: INSERT,
+  const columnList = 'column-list';
+  addShorthand(_.key(columnList)`
+  (
+    ${validFullName}
+    (
+      "," ${optionalRecommendedWhitespace} ${validFullName}
+    )*
+  )
+  `, parser);
+
+  return getInsertQuery(parser, {
     optionalRecommendedWhitespace,
     optionalNonRecommendedWhitespace,
     tableName: validFullName,
