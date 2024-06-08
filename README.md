@@ -4,12 +4,13 @@ Autogrammer constrains the output of language models (LLMs) to generate syntacti
 
 By leveraging grammars, Autogrammer ensures that an LLM generates output adhering to specific structures and syntax, even with smaller models. 
 
-some use cases Autogrammer could be used for:
+## Use Cases
 
-- live code generation in the browser
-- natural language to SQL conversion
-- generating visualizations from text descriptions
-- offline or privacy-focused scenarios. 
+- 💻 Live code generation in the browser
+- 🗣️ Natural language to SQL conversion
+- 🎇 Generating visualizations from text descriptions
+- 🌳 Offline apps
+- 🕵️ When you want your data staying private
 
 Key features:
 
