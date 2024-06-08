@@ -1,8 +1,15 @@
 # Autogrammer
 
-Autogrammer is a library that solves the problem of controlling and constraining the output of language models (LLMs) to generate syntactically valid code, JSON, or SQL. 
+Autogrammer constrains the output of language models (LLMs) to generate syntactically valid JSON or SQL. 
 
-By leveraging pre-defined patterns called grammars, Autogrammer ensures that the LLM generates output that adheres to the desired structure and syntax, even with smaller models. This enables interesting use cases such as live code generation in the browser, natural language to SQL conversion, generating visualizations from text descriptions, and offline or privacy-focused scenarios. 
+By leveraging grammars, Autogrammer ensures that an LLM generates output adhering to specific structures and syntax, even with smaller models. 
+
+some use cases Autogrammer could be used for:
+
+- live code generation in the browser
+- natural language to SQL conversion
+- generating visualizations from text descriptions
+- offline or privacy-focused scenarios. 
 
 Key features:
 
