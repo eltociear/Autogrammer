@@ -11,7 +11,6 @@ You can install `autogrammer` with:
 ```bash
 npm install autogrammer
 ```
-
 ## Quick Start
 
 ```javascript
@@ -39,10 +38,6 @@ import Autogrammer from 'autogrammer'
 
 const autogrammer = new Autogrammer({
   language: 'json',
-  model: {
-    protocol: 'llama.cpp',
-    endpoint: 'http://localhost:4445/completion',
-  },
 })
 
 const prompt = `Return the following address in a JSON object: 
@@ -64,4 +59,4 @@ const result = await autogrammer.execute(prompt, {
   }
 })
 console.log(JSON.parse(result))
-```
+``` 
